@@ -13,5 +13,6 @@ ENV KC_HOSTNAME_STRICT=false
 # Build optimized Keycloak - disable clustering for single instance
 RUN /opt/keycloak/bin/kc.sh build --cache=local
 
-# Run Keycloak with import - PORT from Render environment
-CMD ["/bin/sh", "-c", "/opt/keycloak/bin/kc.sh start --import-realm --http-port=${PORT:-10000} --hostname-strict=false --proxy=edge --cache=local"]
+# Run Keycloak with import
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
+CMD ["start", "--import-realm", "--hostname-strict=false", "--proxy=edge", "--cache=local"]
