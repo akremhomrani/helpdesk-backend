@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: user-service
+
+server:
+  port: 8082
+
+# Test configuration
+keycloak:
+  realm: test-realm
+
+app:
+  password-setup-base-url: http://localhost:3000/setup-password
+
+# Disable Eureka for tests
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
+
+# Disable security for tests
+spring.security.oauth2.resourceserver.jwt.issuer-uri: http://localhost:8080/realms/test-realm
+
+# Logging
+logging:
+  level:
+    com.helpdesk: DEBUG
+    org.springframework.web: INFO

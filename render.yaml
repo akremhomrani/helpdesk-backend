@@ -1,0 +1,96 @@
+services:
+  # Discovery Server (Eureka)
+  - type: web
+    name: helpdesk-discovery-server
+    runtime: docker
+    dockerfilePath: ./discovery-server/Dockerfile
+    dockerContext: ./discovery-server
+    envVars:
+      - key: SERVER_PORT
+        value: 8761
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+
+  # API Gateway
+  - type: web
+    name: helpdesk-api-gateway
+    runtime: docker
+    dockerfilePath: ./API Gateway/Dockerfile
+    dockerContext: ./API Gateway
+    envVars:
+      - key: SERVER_PORT
+        value: 8080
+      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+        sync: false
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+
+  # User Service
+  - type: web
+    name: helpdesk-user-service
+    runtime: docker
+    dockerfilePath: ./user-service/Dockerfile
+    dockerContext: ./user-service
+    envVars:
+      - key: SERVER_PORT
+        value: 8081
+      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+        sync: false
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: KEYCLOAK_AUTH_SERVER_URL
+        sync: false
+
+  # Department Service
+  - type: web
+    name: helpdesk-department-service
+    runtime: docker
+    dockerfilePath: ./departement-service/Dockerfile
+    dockerContext: ./departement-service
+    envVars:
+      - key: SERVER_PORT
+        value: 8082
+      - key: MONGODB_URI
+        sync: false
+      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+        sync: false
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+
+  # Ticket Service
+  - type: web
+    name: helpdesk-ticket-service
+    runtime: docker
+    dockerfilePath: ./ticket-service/Dockerfile
+    dockerContext: ./ticket-service
+    envVars:
+      - key: SERVER_PORT
+        value: 8083
+      - key: KAFKA_BOOTSTRAP_SERVERS
+        sync: false
+      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+        sync: false
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+
+  # Notification Service
+  - type: web
+    name: helpdesk-notification-service
+    runtime: docker
+    dockerfilePath: ./notification-service/Dockerfile
+    dockerContext: ./notification-service
+    envVars:
+      - key: SERVER_PORT
+        value: 8084
+      - key: KAFKA_BOOTSTRAP_SERVERS
+        sync: false
+      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+        sync: false
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+
+databases:
+  # MongoDB for Department Service
+  - name: helpdesk-mongodb
+    plan: starter
+    ipAllowList: []

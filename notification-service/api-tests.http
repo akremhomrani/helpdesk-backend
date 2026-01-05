@@ -1,0 +1,128 @@
+### Notification Service API Tests
+### Direct Service: http://localhost:8086
+### Via API Gateway: http://localhost:8080
+
+### Health Check (Direct)
+GET http://localhost:8086/notifications/health
+Accept: application/json
+
+###
+
+### Health Check (Via API Gateway)
+GET http://localhost:8080/notifications/health
+Accept: application/json
+
+###
+
+### Create a Notification (Ticket Created) - Direct
+POST http://localhost:8086/notifications
+Content-Type: application/json
+
+{
+  "recipientId": "admin-001",
+  "title": "New Ticket Created",
+  "message": "A new support ticket #12345 has been created by John Doe",
+  "type": "TICKET_CREATED",
+  "relatedEntityId": "12345",
+  "relatedEntityType": "TICKET"
+}
+
+###
+
+### Create a Notification (Via API Gateway)
+POST http://localhost:8080/notifications
+Content-Type: application/json
+
+{
+  "recipientId": "admin-001",
+  "title": "New Ticket Created",
+  "message": "A new support ticket #12345 has been created by John Doe",
+  "type": "TICKET_CREATED",
+  "relatedEntityId": "12345",
+  "relatedEntityType": "TICKET"
+}
+
+###
+
+### Create Another Notification - Direct - Direct
+POST http://localhost:8086ifications
+Content-Type: application/json
+
+{
+  "recipientId": "admin-001",
+  "title": "Ticket Updated",
+  "message": "Ticket #12345 has been updated with new information",
+  "type": "TICKET_UPDATED",
+  "relatedEntityId": "12345",
+  "relatedEntityType": "TICKET"
+}
+
+###
+
+### Create Notification for Different User
+POST http://localhost:8084/api/notifications
+Content-Type: application/json
+
+{
+  "recipientId": "user-123",
+  "title": "Ticket Assigned",
+  "message": "You have been assigned to ticket #67890",
+  "type": "TICKET_ASSIGNED",
+  "relatedEntityId": "67890",
+  "relatedEntityType": "TICKET"
+}
+
+###
+
+### Get All Notifications - Direct
+GET http://localhost:8086/notifications
+Accept: application/json
+
+###
+
+### Get All Notifications (Via API Gateway)
+GET http://localhost:8080/notifications
+Accept: application/json
+
+###
+
+### Get Notifications by Recipient (admin-001) - Direct
+GET http://localhost:8086/notifications/recipient/admin-001
+Accept: application/json
+
+###
+
+### Get Notifications by Recipient (Via API Gateway)
+GET http://localhost:8080/notifications/recipient/admin-001
+Accept: application/json
+
+###
+
+### Get Unread Notifications by Recipient
+GET http://localhost:8086/notifications/recipient/admin-001/unread
+Accept: application/json
+
+###
+
+### Get Unread Count for Recipient
+GET http://localhost:8086/notifications/recipient/admin-001/unread/count
+Accept: application/json
+
+###
+
+### Mark Notification as Read (replace {id} with actual ID from previous responses)
+PUT http://localhost:8086/notifications/1/read
+Accept: application/json
+
+###
+
+### Mark All Notifications as Read for Recipient
+PUT http://localhost:8086/notifications/recipient/admin-001/read-all
+Accept: application/json
+
+###
+
+### Delete a Notification (replace {id} with actual ID)
+DELETE http://localhost:8086/notifications/1
+
+###

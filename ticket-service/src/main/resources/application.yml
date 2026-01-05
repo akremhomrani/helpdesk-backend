@@ -1,0 +1,75 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: ticket-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9090/realms/helpdesk-realm
+          jwk-set-uri: http://localhost:9090/realms/helpdesk-realm/protocol/openid-connect/certs
+  data:
+    mongodb:
+      auto-index-creation: true
+  mongodb:
+    uri: mongodb://localhost:27017/helpdesk_tickets
+
+  # File upload configuration
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+
+# Logging
+logging:
+  level:
+    com.helpdesk.ticket: DEBUG
+    org.springframework.security: DEBUG
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+---
+# Docker profile - uses containerized MongoDB and services
+spring:
+  config:
+    activate:
+      on-profile: docker
+  data:
+    mongodb:
+      auto-index-creation: true
+  mongodb:
+    uri: mongodb://mongodb:27017/helpdesk_tickets
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka
+  instance:
+    hostname: ticket-service
+
+
+
+
+
+
+

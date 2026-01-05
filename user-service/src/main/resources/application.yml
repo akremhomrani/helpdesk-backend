@@ -1,0 +1,43 @@
+server:
+  port: 8082
+
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: akr3m.homrani@gmail.com
+    password: sjsg wezo rklm dscm
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  application:
+    name: user-service
+  # Disable OAuth2 for now - uncomment when ready to enable
+  # security:
+  #   oauth2:
+  #     resourceserver:
+  #       jwt:
+  #         issuer-uri: http://localhost:9090/realms/helpdesk-realm
+  #         jwk-set-uri: http://localhost:9090/realms/helpdesk-realm/protocol/openid-connect/certs
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+
+keycloak:
+  server-url: http://localhost:9090
+  realm: helpdesk-realm
+  client-id: admin-cli
+  username: admin
+  password: admin
+
+app:
+  password-setup-base-url: http://localhost:4200/password-setup

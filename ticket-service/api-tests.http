@@ -1,0 +1,165 @@
+### Ticket Service API Tests
+### Make sure to replace {{token}} with your actual Keycloak JWT token
+
+### Health Check
+GET http://localhost:8084/actuator/health
+
+### Get all tickets
+GET http://localhost:8084/api/tickets
+Authorization: Bearer {{token}}
+
+### Get ticket by ID
+GET http://localhost:8084/api/tickets/{{ticketId}}
+Authorization: Bearer {{token}}
+
+### Create a new ticket with VALID department ID (IT Support)
+POST http://localhost:8084/api/tickets
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="title"
+
+Unable to login to the system
+--boundary
+Content-Disposition: form-data; name="description"
+
+I cannot login to the helpdesk system. Getting "Invalid credentials" error even with correct password.
+--boundary
+Content-Disposition: form-data; name="type"
+
+PROBLEM
+--boundary
+Content-Disposition: form-data; name="departementId"
+
+694f2cda7ddba34f0f4b5818
+--boundary
+Content-Disposition: form-data; name="priority"
+
+HIGH
+--boundary--
+
+### Create a ticket with INVALID department ID (should fail)
+POST http://localhost:8084/api/tickets
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="title"
+
+Test with Invalid Department
+--boundary
+Content-Disposition: form-data; name="description"
+
+This should fail because department ID doesn't exist in MongoDB
+--boundary
+Content-Disposition: form-data; name="type"
+
+PROBLEM
+--boundary
+Content-Disposition: form-data; name="departementId"
+
+692b603f9bdb41da41eb17ee
+--boundary
+Content-Disposition: form-data; name="priority"
+
+HIGH
+--boundary--
+
+### Update ticket
+PUT http://localhost:8084/api/tickets/{{ticketId}}
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="title"
+
+Updated Title
+--boundary
+Content-Disposition: form-data; name="description"
+
+Updated description
+--boundary
+Content-Disposition: form-data; name="priority"
+
+CRITICAL
+--boundary--
+
+### Update ticket status
+PATCH http://localhost:8084/api/tickets/{{ticketId}}/status?status=IN_PROGRESS&comment=Working on it
+Authorization: Bearer {{token}}
+
+### Assign ticket
+PATCH http://localhost:8084/api/tickets/{{ticketId}}/assign?assigneeId=user123
+Authorization: Bearer {{token}}
+
+### Review ticket (accept)
+POST http://localhost:8084/api/tickets/{{ticketId}}/review?accept=true&comment=Approved
+Authorization: Bearer {{token}}
+
+### Review ticket (reject)
+POST http://localhost:8084/api/tickets/{{ticketId}}/review?accept=false&comment=Need more information
+Authorization: Bearer {{token}}
+
+### Resubmit ticket
+POST http://localhost:8084/api/tickets/{{ticketId}}/resubmit
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="title"
+
+Revised ticket title
+--boundary
+Content-Disposition: form-data; name="description"
+
+Added more details as requested
+--boundary--
+
+### Transfer ticket
+PATCH http://localhost:8084/api/tickets/{{ticketId}}/transfer?newAssigneeId=user456
+Authorization: Bearer {{token}}
+
+### Upload solution
+POST http://localhost:8084/api/tickets/{{ticketId}}/solution
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="solution.pdf"
+Content-Type: application/pdf
+
+< ./solution.pdf
+--boundary--
+
+### Download attachment
+GET http://localhost:8084/api/tickets/{{ticketId}}/attachment
+Authorization: Bearer {{token}}
+
+### Download solution
+GET http://localhost:8084/api/tickets/{{ticketId}}/solution
+Authorization: Bearer {{token}}
+
+### Get ticket history
+GET http://localhost:8084/api/tickets/{{ticketId}}/history
+Authorization: Bearer {{token}}
+
+### Get my tickets
+GET http://localhost:8084/api/tickets/my-tickets
+Authorization: Bearer {{token}}
+
+### Get my tickets by status
+GET http://localhost:8084/api/tickets/my-tickets?status=IN_PROGRESS
+Authorization: Bearer {{token}}
+
+### Get assigned tickets
+GET http://localhost:8084/api/tickets/assigned
+Authorization: Bearer {{token}}
+
+### Get assigned tickets by status
+GET http://localhost:8084/api/tickets/assigned/IN_PROGRESS
+Authorization: Bearer {{token}}
+
+### Delete ticket
+DELETE http://localhost:8084/api/tickets/{{ticketId}}
+Authorization: Bearer {{token}}
